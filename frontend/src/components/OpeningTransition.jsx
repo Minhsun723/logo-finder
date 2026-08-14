@@ -19,6 +19,8 @@ export default function OpeningTransition() {
       sessionStorage.setItem('ascooo-visited', '1');
       root.style.pointerEvents = 'none';
       root.style.visibility = 'hidden';
+      document.documentElement.dataset.openingComplete = 'true';
+      window.dispatchEvent(new Event('ascooo:opening-complete'));
     };
 
     if (reduceMotion) {

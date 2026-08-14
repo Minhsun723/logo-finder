@@ -29,11 +29,12 @@ main { flex: 1; }
 
 .tool-hero { position: relative; padding: clamp(150px, 19vw, 230px) 0 clamp(70px, 8vw, 100px); overflow: hidden; }
 .tool-hero::after { content: ''; position: absolute; right: -9vw; bottom: 12%; width: clamp(180px, 27vw, 390px); height: 3px; background: var(--gradient-accent); transform: rotate(-12deg); }
-.section-title { position: relative; padding-top: 18px; }
-.section-title > span { position: absolute; z-index: -1; top: -30%; left: -10px; color: var(--color-section-title); font: 700 clamp(5rem, 13vw, 10rem)/.9 var(--font-display); letter-spacing: -.06em; white-space: nowrap; user-select: none; }
-.section-title p { margin: 0 0 18px; color: var(--color-accent); font: 600 .78rem/1 var(--font-display); letter-spacing: .13em; text-transform: uppercase; }
-.section-title h1 { margin: 0; font: 600 clamp(3rem, 7vw, 6.4rem)/.9 var(--font-display); letter-spacing: -.055em; }
-.section-title .hero-copy { width: min(520px, 100%); margin: 34px 0 0; color: var(--color-text-muted); font: 400 clamp(.95rem, 1.3vw, 1.08rem)/1.6 var(--font-body); letter-spacing: 0; text-transform: none; }
+.tool-hero__title { margin-bottom: 0; padding-top: 18px; }
+.tool-hero__title::after { bottom: -18px; }
+.tool-hero__title .c-section-title__bg { top: 42%; font-size: clamp(5rem, 13vw, 10rem); line-height: .9; letter-spacing: -.06em; }
+.tool-hero__title .c-section-title__text { margin: 0; font-size: clamp(3rem, 7vw, 6.4rem); line-height: .9; letter-spacing: -.055em; }
+.tool-hero__title .c-section-title__cap { margin: 18px 0 0; font: 600 .78rem/1 var(--font-display); letter-spacing: .13em; }
+.tool-hero__title .hero-copy { position: relative; z-index: 1; width: min(520px, 100%); margin: 34px 0 0; color: var(--color-text-muted); font: 400 clamp(.95rem, 1.3vw, 1.08rem)/1.6 var(--font-body); letter-spacing: 0; text-transform: none; }
 
 .tool-section { padding: 0 0 clamp(90px, 12vw, 150px); }
 .tool-controls { display: grid; grid-template-columns: 1fr 1.7fr 1fr; gap: 28px; padding: 28px; border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-bg); box-shadow: 0 10px 40px rgba(15,23,42,.05); }
@@ -107,7 +108,7 @@ input:focus, select:focus { border-color: var(--color-text); }
 
 @media (max-width: 640px) {
   .tool-hero { padding: 120px 0 56px; }
-  .section-title > span { top: -6%; font-size: 4.5rem; }
+  .tool-hero__title .c-section-title__bg { top: 44%; font-size: 4.5rem; }
   .tool-hero::after { display: none; }
   .tool-controls { grid-template-columns: 1fr; padding: 20px; gap: 22px; }
   .filter-control { grid-column: auto; }

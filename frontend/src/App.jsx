@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { SiteFooter, SiteHeader } from './components/SiteLayout.jsx';
 import OpeningTransition from './components/OpeningTransition.jsx';
+import HeroTitle from './components/HeroTitle.jsx';
 import ToolControls from './components/ToolControls.jsx';
 import ResultList from './components/ResultList.jsx';
 import ResultDetail from './components/ResultDetail.jsx';
@@ -147,12 +148,7 @@ export default function App() {
       <main>
         <section className="tool-hero">
           <div className="container">
-            <div className="section-title">
-              <span aria-hidden="true">Logo Finder</span>
-              <p>Ascooo Utility / 01</p>
-              <h1>Logo<br />Finder</h1>
-              <p className="hero-copy">搜尋影視作品、確認標題 Logo，並取得原始圖片。</p>
-            </div>
+            <HeroTitle />
           </div>
         </section>
         <section className="tool-section">
