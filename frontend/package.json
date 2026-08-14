@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "deploy": "npm run build && wrangler deploy",
     "preview": "vite preview",
     "test": "node --test src/lib/search.test.js"
   },
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.0.5",
-    "vite": "^8.2.1"
+    "vite": "^8.2.1",
+    "wrangler": "^4.123.0"
   }
 }

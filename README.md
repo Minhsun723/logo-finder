@@ -54,13 +54,13 @@ The local `.env` is used to configure Cloud Run but is excluded from the uploade
 Invoke-RestMethod https://YOUR_CLOUD_RUN_URL/api/health
 ```
 
-### 2. Cloudflare Pages frontend
+### 2. Cloudflare Workers frontend
 
-The Pages project is connected to `Minhsun723/logo-finder` and automatically deploys pushes to `main` with these settings:
+The Workers project is connected to `Minhsun723/logo-finder` and automatically deploys pushes to `main` with these settings:
 
 - Root directory: `frontend`
 - Build command: `npm run build`
-- Build output directory: `dist`
+- Deploy command: `npx wrangler deploy`
 - Production branch: `main`
 
 The production API URL is committed in `frontend/.env.production`. For a local production-build check:
@@ -72,22 +72,22 @@ npm test
 npm run build
 ```
 
-Push the commit to `main` to trigger Cloudflare Pages. The included `public/_redirects` file provides SPA fallback routing.
+Push the commit to `main` to trigger Cloudflare Workers. `frontend/wrangler.jsonc` publishes `dist/` as static assets and provides SPA fallback routing.
 
-### 3. Restrict backend CORS to Pages
+### 3. Restrict backend CORS to Workers
 
-After Pages returns its production URL, update the Cloud Run environment and keep all other variables unchanged:
+After Workers returns its production URL, update the Cloud Run environment and keep all other variables unchanged:
 
 ```powershell
 gcloud run services update logo-finder-api `
   --region asia-east1 `
-  --update-env-vars FRONTEND_ORIGINS=https://logo-finder.pages.dev
+  --update-env-vars FRONTEND_ORIGINS=https://logo-finder.garytsai07230723.workers.dev
 ```
 
 If a custom domain is added later, provide both origins as a comma-separated value. Do not add a trailing slash.
 
 Current production endpoints:
 
-- Frontend: `https://logo-finder.pages.dev`
+- Frontend: `https://logo-finder.garytsai07230723.workers.dev`
 - Backend: `https://logo-finder-api-1082224547224.asia-east1.run.app`
 - Google Cloud project: `logo-finder` (`ascooo-logo-finder-20260814`)
