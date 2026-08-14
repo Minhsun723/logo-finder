@@ -1,4 +1,4 @@
-# iQIYI Logo Finder migration
+# Logo Finder migration
 
 This folder keeps the migration additive: the original Tkinter program remains available while the reusable API logic lives in `backend/` and the web interface lives in `frontend/`.
 
