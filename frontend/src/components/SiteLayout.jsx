@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import logoDark from '../assets/img/logo_dark.svg';
 import logoLight from '../assets/img/logo_light.svg';
 
+const MAIN_SITE_URL = 'https://ascooo.com';
+
 const links = [
   ['首頁', '/'], ['作品', '/works'], ['關於', '/about'], ['公司', '/company'],
   ['服務狀態', '/status'], ['最新消息', '/news'],
@@ -36,11 +38,11 @@ export function SiteHeader() {
     <>
       <header className={`l-header${scrolled ? ' is-scrolled' : ''}`} id="header">
         <h1 className="l-header__brand">
-          <a href="/" className="l-header__brand-link" aria-label="Ascooo Home"><img src={logoDark} alt="Ascooo" /></a>
+          <a href={`${MAIN_SITE_URL}/`} className="l-header__brand-link" aria-label="Ascooo Home"><img src={logoDark} alt="Ascooo" /></a>
         </h1>
         <nav className="l-header__nav is-pc" aria-label="主要選單">
           <ul className="l-header__nav-list">
-            {links.map(([label, href]) => <li key={href}><a href={href} className="l-header__nav-link">{label}</a></li>)}
+            {links.map(([label, href]) => <li key={href}><a href={`${MAIN_SITE_URL}${href}`} className="l-header__nav-link">{label}</a></li>)}
           </ul>
         </nav>
         <div className="l-header__actions">
@@ -51,7 +53,7 @@ export function SiteHeader() {
               </svg>
             </button>
             <div className="l-lang__menu">
-              <a className="l-lang__btn is-active" href="/">繁體中文</a><a className="l-lang__btn" href="/en/">English</a>
+              <a className="l-lang__btn is-active" href={`${MAIN_SITE_URL}/`}>繁體中文</a><a className="l-lang__btn" href={`${MAIN_SITE_URL}/en/`}>English</a>
             </div>
           </div>
         </div>
@@ -60,11 +62,11 @@ export function SiteHeader() {
       <nav className={`l-nav${open ? ' is-open' : ''}`} aria-label="行動版主要選單" aria-hidden={!open}>
         <div className="l-nav__bg" />
         <div className="l-nav__container">
-          <div className="l-nav__brand"><a href="/" className="l-nav__brand-link" aria-label="Ascooo Home"><img src={logoLight} alt="Ascooo" /></a></div>
+          <div className="l-nav__brand"><a href={`${MAIN_SITE_URL}/`} className="l-nav__brand-link" aria-label="Ascooo Home"><img src={logoLight} alt="Ascooo" /></a></div>
           <div className="l-nav__content">
             <ul className="l-nav__list">
               {[...links, ['聯絡我們', '/contact']].map(([label, href]) => (
-                <li className="l-nav__list-item" key={href}><a href={href} className="l-nav__link" onClick={() => setOpen(false)}><span className="l-nav__link-text">{label}</span></a></li>
+                <li className="l-nav__list-item" key={href}><a href={`${MAIN_SITE_URL}${href}`} className="l-nav__link" onClick={() => setOpen(false)}><span className="l-nav__link-text">{label}</span></a></li>
               ))}
             </ul>
           </div>
@@ -97,12 +99,12 @@ export function SiteFooter() {
     <footer className="l-footer">
       <div className="l-footer__container">
         <div className="l-footer__support"><div className="l-footer__support-inner">
-          <ul className="l-footer__support-list --legal"><li><a href="/privacy" className="l-footer__support-link">Privacy Policy</a></li><li><a href="/terms" className="l-footer__support-link">Terms of Service</a></li></ul>
-          <ul className="l-footer__support-list --nav"><li><a href="/contact" className="l-footer__support-link">Contact</a></li><li><a href="/about" className="l-footer__support-link">About</a></li></ul>
+          <ul className="l-footer__support-list --legal"><li><a href={`${MAIN_SITE_URL}/privacy`} className="l-footer__support-link">Privacy Policy</a></li><li><a href={`${MAIN_SITE_URL}/terms`} className="l-footer__support-link">Terms of Service</a></li></ul>
+          <ul className="l-footer__support-list --nav"><li><a href={`${MAIN_SITE_URL}/contact`} className="l-footer__support-link">Contact</a></li><li><a href={`${MAIN_SITE_URL}/about`} className="l-footer__support-link">About</a></li></ul>
         </div></div>
         <div className="l-footer__bottom">
           <div className="l-footer__legal"><p className="l-footer__legal-text">©Ascooo Inc. All rights reserved.</p></div>
-          <div className="l-footer__logo"><a href="/" aria-label="Ascooo Home"><img src={logoDark} alt="Ascooo" /></a></div>
+          <div className="l-footer__logo"><a href={`${MAIN_SITE_URL}/`} aria-label="Ascooo Home"><img src={logoDark} alt="Ascooo" /></a></div>
           <SocialLinks />
         </div>
       </div>
