@@ -44,7 +44,7 @@ export default function HeroTitle() {
         .to(text, {
           y: 0,
           autoAlpha: 1,
-          letterSpacing: '-0.055em',
+          letterSpacing: '-0.02em',
           filter: 'blur(0px)',
           clipPath: 'polygon(-20% -20%, 120% -20%, 120% 120%, -20% 120%)',
           duration: 1.2,
