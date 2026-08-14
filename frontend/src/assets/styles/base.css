@@ -1,0 +1,209 @@
+/* ============================================
+   ASCOOO — Design System & Base Styles
+   Works with Tailwind CSS v4 CDN (<script>)
+   ============================================ */
+
+/* ---- Design Tokens as CSS Custom Properties ---- */
+:root {
+  /* Colors */
+  --color-bg: #ffffff;
+  --color-bg-alt: #f4f8fb;
+  --color-text: #0f172a;
+  --color-text-muted: #64748b;
+  --color-border: #e2e8f0;
+  
+  --color-accent: #0072ff;
+  --color-accent-alt: #ff007f;
+  --gradient-accent: linear-gradient(90deg, #00C6FF, #0072FF, #FF007F, #FFD700);
+
+  --color-bg-dark: #000000;
+  --color-section-title: #F0F0F0;
+
+  --font-display: "DM Sans", sans-serif;
+  --font-body: "Noto Sans TC", "DM Sans", sans-serif;
+
+  --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --fs-hero: clamp(3rem, 8vw, 7rem);
+  --fs-section: clamp(4rem, 12vw, 10rem);
+  --fs-h2: clamp(1.5rem, 3vw, 2.5rem);
+  --fs-h3: clamp(1.2rem, 2vw, 1.5rem);
+  --fs-body: clamp(0.9rem, 1.2vw, 1.1rem);
+  --fs-caption: 0.85rem;
+
+  --spacing-section: clamp(80px, 12vw, 160px);
+  --spacing-container: clamp(20px, 5vw, 80px);
+  --max-width: 1200px;
+}
+
+/* ---- Modern CSS Reset ---- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: auto;
+  overflow-y: scroll;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+img,
+picture,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* ---- Global Typography ---- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* ---- Utility: Page Wrapper ---- */
+.l-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.l-wrap__container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ---- Utility: Container ---- */
+.u-container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-container);
+}
+
+/* ---- Animation initial states ---- */
+.js-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.js-reveal-left {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+
+.js-reveal-right {
+  opacity: 0;
+  transform: translateX(60px);
+}
+
+.js-reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+}
+
+/* ---- Selection ---- */
+::selection {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+/* ---- Scrollbar (subtle) ---- */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ---- Responsive helpers ---- */
+.is-pc {
+  display: inline;
+}
+.is-sp {
+  display: none;
+}
+
+/* ---- I18n Loading state ---- */
+.i18n-loading [data-i18n] {
+  opacity: 0 !important;
+}
+
+@media (max-width: 1024px) {
+  .is-pc {
+    display: none;
+  }
+  .is-sp {
+    display: inline;
+  }
+}
+
