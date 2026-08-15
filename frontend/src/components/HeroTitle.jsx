@@ -1,11 +1,13 @@
 import { useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { useLocale } from '../i18n.jsx';
 
 gsap.registerPlugin(useGSAP);
 
 export default function HeroTitle() {
   const titleRef = useRef(null);
+  const { t } = useLocale();
 
   useGSAP(() => {
     const title = titleRef.current;
@@ -82,7 +84,7 @@ export default function HeroTitle() {
       <span className="c-section-title__bg" aria-hidden="true">Logo Finder</span>
       <h1 className="c-section-title__text">Logo Finder</h1>
       <p className="c-section-title__cap">Ascooo Utility / 01</p>
-      <p className="hero-copy">搜尋影視作品、確認標題 Logo，並取得原始圖片。</p>
+      <p className="hero-copy">{t('hero.copy')}</p>
     </div>
   );
 }

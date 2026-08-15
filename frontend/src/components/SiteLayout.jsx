@@ -1,17 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import logoDark from '../assets/img/logo_dark.svg';
 import logoLight from '../assets/img/logo_light.svg';
+import { useLocale } from '../i18n.jsx';
 
 const MAIN_SITE_URL = 'https://ascooo.com';
 
+const mainSiteHref = (path, locale) => `${MAIN_SITE_URL}${locale === 'en' ? '/en' : ''}${path}`;
+
 const links = [
-  ['首頁', '/'], ['作品', '/works'], ['關於', '/about'], ['公司', '/company'],
-  ['服務狀態', '/status'], ['最新消息', '/news'],
+  ['nav.home', '/'], ['nav.works', '/works'], ['nav.about', '/about'], ['nav.company', '/company'],
+  ['nav.status', '/status'], ['nav.news', '/news'],
 ];
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [languageOpen, setLanguageOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const languageRef = useRef(null);
+  const { locale, setLocale, t } = useLocale();
+
+  const changeLanguage = (nextLocale) => {
+    setLocale(nextLocale);
+    setLanguageOpen(false);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -34,46 +45,76 @@ export function SiteHeader() {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!languageOpen) return undefined;
+
+    const closeOnOutsideClick = (event) => {
+      if (!languageRef.current?.contains(event.target)) setLanguageOpen(false);
+    };
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') {
+        setLanguageOpen(false);
+        languageRef.current?.querySelector('.l-lang__toggle')?.focus();
+      }
+    };
+
+    document.addEventListener('pointerdown', closeOnOutsideClick);
+    document.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.removeEventListener('pointerdown', closeOnOutsideClick);
+      document.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [languageOpen]);
+
   return (
     <>
       <header className={`l-header${scrolled ? ' is-scrolled' : ''}`} id="header">
         <h1 className="l-header__brand">
-          <a href={`${MAIN_SITE_URL}/`} className="l-header__brand-link" aria-label="Ascooo Home"><img src={logoDark} alt="Ascooo" /></a>
+          <a href={mainSiteHref('/', locale)} className="l-header__brand-link" aria-label="Ascooo Home"><img src={logoDark} alt="Ascooo" /></a>
         </h1>
-        <nav className="l-header__nav is-pc" aria-label="主要選單">
+        <nav className="l-header__nav is-pc" aria-label={t('nav.main')}>
           <ul className="l-header__nav-list">
-            {links.map(([label, href]) => <li key={href}><a href={`${MAIN_SITE_URL}${href}`} className="l-header__nav-link">{label}</a></li>)}
+            {links.map(([label, href]) => <li key={href}><a href={mainSiteHref(href, locale)} className="l-header__nav-link">{t(label)}</a></li>)}
           </ul>
         </nav>
         <div className="l-header__actions">
-          <div className="l-lang l-lang--dropdown">
-            <button className="l-lang__toggle" type="button" aria-label="Language">
+          <div className={`l-lang l-lang--dropdown${languageOpen ? ' is-open' : ''}`} ref={languageRef}>
+            <button
+              className="l-lang__toggle"
+              type="button"
+              aria-label={t('language.switch')}
+              aria-haspopup="menu"
+              aria-expanded={languageOpen}
+              aria-controls="language-menu"
+              onClick={() => setLanguageOpen((value) => !value)}
+            >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
               </svg>
             </button>
-            <div className="l-lang__menu">
-              <a className="l-lang__btn is-active" href={`${MAIN_SITE_URL}/`}>繁體中文</a><a className="l-lang__btn" href={`${MAIN_SITE_URL}/en/`}>English</a>
+            <div className="l-lang__menu" id="language-menu" role="menu">
+              <button className={`l-lang__btn${locale === 'zh' ? ' is-active' : ''}`} type="button" role="menuitemradio" aria-checked={locale === 'zh'} onClick={() => changeLanguage('zh')}>繁體中文</button>
+              <button className={`l-lang__btn${locale === 'en' ? ' is-active' : ''}`} type="button" role="menuitemradio" aria-checked={locale === 'en'} onClick={() => changeLanguage('en')}>English</button>
             </div>
           </div>
         </div>
       </header>
 
-      <nav className={`l-nav${open ? ' is-open' : ''}`} aria-label="行動版主要選單" aria-hidden={!open}>
+      <nav className={`l-nav${open ? ' is-open' : ''}`} aria-label={t('nav.mobile')} aria-hidden={!open}>
         <div className="l-nav__bg" />
         <div className="l-nav__container">
-          <div className="l-nav__brand"><a href={`${MAIN_SITE_URL}/`} className="l-nav__brand-link" aria-label="Ascooo Home"><img src={logoLight} alt="Ascooo" /></a></div>
+          <div className="l-nav__brand"><a href={mainSiteHref('/', locale)} className="l-nav__brand-link" aria-label="Ascooo Home"><img src={logoLight} alt="Ascooo" /></a></div>
           <div className="l-nav__content">
             <ul className="l-nav__list">
-              {[...links, ['聯絡我們', '/contact']].map(([label, href]) => (
-                <li className="l-nav__list-item" key={href}><a href={`${MAIN_SITE_URL}${href}`} className="l-nav__link" onClick={() => setOpen(false)}><span className="l-nav__link-text">{label}</span></a></li>
+              {[...links, ['nav.contact', '/contact']].map(([label, href]) => (
+                <li className="l-nav__list-item" key={href}><a href={mainSiteHref(href, locale)} className="l-nav__link" onClick={() => setOpen(false)}><span className="l-nav__link-text">{t(label)}</span></a></li>
               ))}
             </ul>
           </div>
         </div>
       </nav>
 
-      <button className="l-menu" type="button" aria-label="Toggle Menu" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+      <button className="l-menu" type="button" aria-label={t('nav.toggle')} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
         <span className="l-menu__content">
           <span className="l-menu__line --open"><span className="l-menu__line-bar">MENU</span><span className="l-menu__line-bar" /></span>
           <span className="l-menu__line --close"><span className="l-menu__line-bar" /><span className="l-menu__line-bar" /></span>
@@ -95,16 +136,17 @@ function SocialLinks() {
 }
 
 export function SiteFooter() {
+  const { locale, t } = useLocale();
   return (
     <footer className="l-footer">
       <div className="l-footer__container">
         <div className="l-footer__support"><div className="l-footer__support-inner">
-          <ul className="l-footer__support-list --legal"><li><a href={`${MAIN_SITE_URL}/privacy`} className="l-footer__support-link">Privacy Policy</a></li><li><a href={`${MAIN_SITE_URL}/terms`} className="l-footer__support-link">Terms of Service</a></li></ul>
-          <ul className="l-footer__support-list --nav"><li><a href={`${MAIN_SITE_URL}/contact`} className="l-footer__support-link">Contact</a></li><li><a href={`${MAIN_SITE_URL}/about`} className="l-footer__support-link">About</a></li></ul>
+          <ul className="l-footer__support-list --legal"><li><a href={mainSiteHref('/privacy', locale)} className="l-footer__support-link">{t('footer.privacy')}</a></li><li><a href={mainSiteHref('/terms', locale)} className="l-footer__support-link">{t('footer.terms')}</a></li></ul>
+          <ul className="l-footer__support-list --nav"><li><a href={mainSiteHref('/contact', locale)} className="l-footer__support-link">{t('footer.contact')}</a></li><li><a href={mainSiteHref('/about', locale)} className="l-footer__support-link">{t('footer.about')}</a></li></ul>
         </div></div>
         <div className="l-footer__bottom">
           <div className="l-footer__legal"><p className="l-footer__legal-text">©Ascooo Inc. All rights reserved.</p></div>
-          <div className="l-footer__logo"><a href={`${MAIN_SITE_URL}/`} aria-label="Ascooo Home"><img src={logoDark} alt="Ascooo" /></a></div>
+          <div className="l-footer__logo"><a href={mainSiteHref('/', locale)} aria-label="Ascooo Home"><img src={logoDark} alt="Ascooo" /></a></div>
           <SocialLinks />
         </div>
       </div>

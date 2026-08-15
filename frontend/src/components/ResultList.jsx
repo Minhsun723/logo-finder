@@ -1,15 +1,18 @@
-function sourceLabel(sources = []) {
-  const labels = { albumList: '作品列表', tv_common: 'TV 分類', search: '線上搜尋' };
-  return sources.map((source) => labels[source] || source).join(' + ');
-}
+import { useLocale } from '../i18n.jsx';
 
 export default function ResultList({ items, selectedId, loading, emptyMessage, onSelect }) {
+  const { t } = useLocale();
+  const sourceLabel = (sources = []) => sources.map((source) => {
+    const label = t(`source.${source}`);
+    return label === `source.${source}` ? source : label;
+  }).join(' + ');
+
   if (loading && !items.length) {
-    return <div className="results-state" aria-live="polite"><span className="loader" />正在取得作品資料</div>;
+    return <div className="results-state" aria-live="polite"><span className="loader" />{t('status.fetching')}</div>;
   }
   if (!items.length) return <div className="results-state" aria-live="polite">{emptyMessage}</div>;
   return (
-    <div className="result-list" role="listbox" aria-label="作品結果">
+    <div className="result-list" role="listbox" aria-label={t('results.items')}>
       {items.map((item, index) => (
         <button
           type="button"

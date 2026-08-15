@@ -32,8 +32,8 @@ main { flex: 1; }
 .tool-hero__title { margin-bottom: 0; padding-top: 18px; }
 .tool-hero__title::after { bottom: -18px; }
 .tool-hero__title .c-section-title__text { margin: 0; }
-.tool-hero__title .c-section-title__cap { margin: 18px 0 0; font: 600 .78rem/1 var(--font-display); letter-spacing: .13em; }
-.tool-hero__title .hero-copy { position: relative; z-index: 1; width: min(520px, 100%); margin: 34px 0 0; color: var(--color-text-muted); font: 400 clamp(.95rem, 1.3vw, 1.08rem)/1.6 var(--font-body); letter-spacing: 0; text-transform: none; }
+.tool-hero__title .c-section-title__cap { margin: 18px 0 0; font: 600 .78rem/1 var(--font-display); letter-spacing: .13em; white-space: nowrap; }
+.tool-hero__title .hero-copy { position: relative; z-index: 1; width: max-content; max-width: 100%; margin: 34px 0 0; color: var(--color-text-muted); font: 400 clamp(.95rem, 1.3vw, 1.08rem)/1.6 var(--font-body); letter-spacing: 0; text-transform: none; white-space: nowrap; }
 
 .tool-section { padding: 0 0 clamp(90px, 12vw, 150px); }
 .tool-controls { display: grid; grid-template-columns: 1fr 1.7fr 1fr; gap: 28px; padding: 28px; border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-bg); box-shadow: 0 10px 40px rgba(15,23,42,.05); }
@@ -50,6 +50,10 @@ input:focus, select:focus { border-color: var(--color-text); }
 .segmented button { border: 0; border-right: 1px solid var(--color-border); background: transparent; cursor: pointer; font-size: .83rem; }
 .segmented button:last-child { border: 0; }
 .segmented button.is-active { color: var(--color-bg); background: var(--color-text); }
+
+html[lang="en"] .tool-controls { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.5fr) minmax(270px, 1.1fr); gap: 20px; }
+html[lang="en"] .button { padding-inline: 14px; font-size: .7rem; letter-spacing: .055em; white-space: nowrap; }
+html[lang="en"] .segmented button { padding-inline: 5px; font-size: .72rem; line-height: 1.1; white-space: nowrap; }
 .status-line { display: grid; grid-template-columns: 100px 1fr auto; align-items: center; gap: 20px; min-height: 64px; border-bottom: 1px solid var(--color-border); }
 .status-line > span { color: var(--color-accent); font: 600 .7rem/1 var(--font-display); letter-spacing: .12em; }
 .status-line p { margin: 0; color: var(--color-text-muted); font-size: .86rem; }
@@ -92,7 +96,8 @@ input:focus, select:focus { border-color: var(--color-text); }
 .detail-actions { display: flex; gap: 8px; margin-top: 25px; }
 .logo-url { margin: 16px 0 0; color: var(--color-text-muted); font: 400 .68rem/1.5 var(--font-display); overflow-wrap: anywhere; }
 .detail-empty { display: flex; flex-direction: column; justify-content: space-between; }
-.detail-empty p { max-width: 280px; margin: 0; color: var(--color-text-muted); }
+.detail-empty p { max-width: none; margin: 0; color: var(--color-text-muted); font-size: clamp(.95rem, 1.4vw, 1.05rem); letter-spacing: -.01em; white-space: nowrap; }
+.detail-select-mobile { display: none; }
 .detail-number { color: #e2e8f0; font: 700 clamp(3.3rem, 7vw, 5.5rem)/.9 var(--font-display); letter-spacing: -.06em; }
 
 :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
@@ -100,15 +105,20 @@ input:focus, select:focus { border-color: var(--color-text); }
 
 @media (max-width: 1024px) {
   .tool-controls { grid-template-columns: 1fr 1fr; }
+  html[lang="en"] .tool-controls { grid-template-columns: 1fr 1fr; }
   .filter-control { grid-column: 1 / -1; }
   .workspace { --result-body-height: clamp(440px, 62vh, 620px); grid-template-columns: 1fr; }
   .detail-panel { position: static; }
+  .detail-select-desktop { display: none; }
+  .detail-select-mobile { display: inline; }
 }
 
 @media (max-width: 640px) {
   .tool-hero { padding: 120px 0 56px; }
   .tool-hero::after { display: none; }
   .tool-controls { grid-template-columns: 1fr; padding: 20px; gap: 22px; }
+  html[lang="en"] .tool-controls { grid-template-columns: 1fr; }
+  .tool-hero__title .hero-copy { font-size: clamp(.68rem, 3vw, .82rem); }
   .filter-control { grid-column: auto; }
   .control-row { flex-wrap: wrap; }
   .control-row input, .control-row select { flex: 1 1 180px; }

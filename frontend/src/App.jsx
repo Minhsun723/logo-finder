@@ -7,6 +7,7 @@ import ResultList from './components/ResultList.jsx';
 import ResultDetail from './components/ResultDetail.jsx';
 import { fetchCategories, fetchCategory, searchTitles } from './services/api.js';
 import { filterItems } from './lib/search.js';
+import { useLocale } from './i18n.jsx';
 
 const fallbackCategories = [
   ['recommend', '推薦'], ['drama', '戲劇'], ['movie', '電影'], ['free', '免費'],
@@ -14,6 +15,7 @@ const fallbackCategories = [
 ].map(([id, name]) => ({ id, name }));
 
 export default function App() {
+  const { t } = useLocale();
   const [categories, setCategories] = useState(fallbackCategories);
   const [category, setCategory] = useState('anime');
   const [categoryItems, setCategoryItems] = useState([]);
@@ -27,7 +29,7 @@ export default function App() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [status, setStatus] = useState('準備載入動漫分類');
+  const [status, setStatus] = useState({ key: 'status.ready' });
   const categoryRequest = useRef(null);
   const searchRequest = useRef(null);
 
@@ -36,7 +38,7 @@ export default function App() {
     if (cached && !force) {
       setCategoryItems(cached);
       setSelectedItem(cached[0] || null);
-      setStatus(`已從快取載入 ${cached.length} 部作品`);
+      setStatus({ key: 'status.cached', values: { count: cached.length } });
       return;
     }
     categoryRequest.current?.abort();
@@ -44,7 +46,7 @@ export default function App() {
     categoryRequest.current = controller;
     setLoading(true);
     setError('');
-    setStatus(`正在載入${categories.find((item) => item.id === categoryId)?.name || ''}分類…`);
+    setStatus({ key: 'status.loading', values: { categoryId } });
     try {
       const data = await fetchCategory(categoryId, controller.signal);
       const items = data.items || [];
@@ -52,16 +54,16 @@ export default function App() {
       if (categoryRef.current !== categoryId) return;
       setCategoryItems(items);
       setSelectedItem(items[0] || null);
-      setStatus(`已載入 ${items.length} 部作品，其中 ${items.filter((item) => item.logo).length} 部有 Logo`);
+      setStatus({ key: 'status.loaded', values: { count: items.length, logoCount: items.filter((item) => item.logo).length } });
     } catch (requestError) {
       if (requestError.name !== 'AbortError') {
         setError(requestError.message);
-        setStatus('分類載入失敗');
+        setStatus({ key: 'status.loadFailed' });
       }
     } finally {
       if (categoryRequest.current === controller) setLoading(false);
     }
-  }, [categories]);
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -87,7 +89,9 @@ export default function App() {
     const cached = cacheRef.current[categoryId];
     setCategoryItems(cached || []);
     setSelectedItem(cached?.[0] || null);
-    setStatus(cached ? `已從快取載入 ${cached.length} 部作品` : `已選擇${categories.find((item) => item.id === categoryId)?.name || ''}，按「載入分類」開始載入`);
+    setStatus(cached
+      ? { key: 'status.cached', values: { count: cached.length } }
+      : { key: 'status.selected', values: { categoryId } });
   };
 
   const changeKeyword = (value) => {
@@ -98,7 +102,9 @@ export default function App() {
       setOnlineResults([]);
       setOnlineKeyword('');
       setShowingOnlineResults(false);
-      setStatus(categoryItems.length ? `已恢復目前分類的 ${categoryItems.length} 部作品` : '尚未載入分類資料');
+      setStatus(categoryItems.length
+        ? { key: 'status.restored', values: { count: categoryItems.length } }
+        : { key: 'status.notLoaded' });
     } else if (showingOnlineResults && value.trim() !== onlineKeyword) {
       setShowingOnlineResults(false);
     }
@@ -112,7 +118,7 @@ export default function App() {
     searchRequest.current = controller;
     setLoading(true);
     setError('');
-    setStatus(`正在線上搜尋「${query}」…`);
+    setStatus({ key: 'status.searching', values: { query } });
     try {
       const data = await searchTitles(query, controller.signal);
       const items = data.items || [];
@@ -120,11 +126,11 @@ export default function App() {
       setOnlineKeyword(query);
       setShowingOnlineResults(true);
       setSelectedItem(items[0] || null);
-      setStatus(`線上搜尋「${query}」找到 ${items.length} 筆結果`);
+      setStatus({ key: 'status.found', values: { query, count: items.length } });
     } catch (requestError) {
       if (requestError.name !== 'AbortError') {
         setError(requestError.message);
-        setStatus('線上搜尋失敗');
+        setStatus({ key: 'status.searchFailed' });
       }
     } finally {
       if (searchRequest.current === controller) setLoading(false);
@@ -137,9 +143,21 @@ export default function App() {
     setSelectedItem(filtered.items[0] || null);
   }, [filtered.items, selectedItem]);
 
-  const emptyMessage = loading ? '正在取得作品資料' : filtered.useOnline
-    ? `找不到符合「${onlineKeyword}」的作品`
-    : keyword.trim() && categoryItems.length ? '目前分類找不到符合的作品，可以使用線上搜尋' : '載入分類以查看作品';
+  const emptyMessage = loading ? t('status.fetching') : filtered.useOnline
+    ? t('empty.online', { query: onlineKeyword })
+    : keyword.trim() && categoryItems.length ? t('empty.local') : t('empty.load');
+
+  const activeCategory = categories.find((item) => item.id === category);
+  const activeCategoryTranslation = t(`category.${category}`);
+  const activeCategoryName = activeCategoryTranslation === `category.${category}` ? activeCategory?.name : activeCategoryTranslation;
+  const statusCategory = status.values?.categoryId
+    ? categories.find((item) => item.id === status.values.categoryId)
+    : null;
+  const statusCategoryTranslation = status.values?.categoryId ? t(`category.${status.values.categoryId}`) : '';
+  const statusValues = status.values?.categoryId ? {
+    ...status.values,
+    category: statusCategoryTranslation === `category.${status.values.categoryId}` ? statusCategory?.name : statusCategoryTranslation,
+  } : status.values;
 
   return (
     <div className="page-wrap">
@@ -166,12 +184,12 @@ export default function App() {
             />
             <div className={`status-line${error ? ' is-error' : ''}`} role="status" aria-live="polite">
               <span>{loading ? 'SYNC' : error ? 'ERROR' : filtered.useOnline ? 'ONLINE' : 'CATEGORY'}</span>
-              <p>{error || status}</p>
+              <p>{error || t(status.key, statusValues)}</p>
               <strong>{filtered.items.length.toString().padStart(2, '0')}</strong>
             </div>
             <div className="workspace">
-              <section className="results-panel" aria-label="搜尋結果">
-                <div className="panel-heading"><span>Results</span><small>{filtered.useOnline ? '線上搜尋' : categories.find((item) => item.id === category)?.name}</small></div>
+              <section className="results-panel" aria-label={t('results.label')}>
+                <div className="panel-heading"><span>Results</span><small>{filtered.useOnline ? t('results.online') : activeCategoryName}</small></div>
                 <ResultList items={filtered.items} selectedId={selectedItem?.id} loading={loading} emptyMessage={emptyMessage} onSelect={setSelectedItem} />
               </section>
               <ResultDetail item={selectedItem} />
