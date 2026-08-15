@@ -89,5 +89,5 @@ If a custom domain is added later, provide both origins as a comma-separated val
 Current production endpoints:
 
 - Frontend: `https://logo-finder.garytsai07230723.workers.dev`
-- Backend: `https://logo-finder-api-1082224547224.asia-east1.run.app`
+- Backend: `https://api-logo.ascooo.com`
 - Google Cloud project: `logo-finder` (`ascooo-logo-finder-20260814`)
