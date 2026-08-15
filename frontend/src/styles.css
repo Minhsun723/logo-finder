@@ -40,6 +40,10 @@ main { flex: 1; }
 .control-group label, .control-label { display: block; margin-bottom: 9px; color: var(--color-text-muted); font: 600 .72rem/1 var(--font-display); letter-spacing: .12em; text-transform: uppercase; }
 .control-row { display: flex; gap: 8px; }
 input, select { min-width: 0; width: 100%; height: 46px; padding: 0 14px; color: var(--color-text); background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 4px; outline: none; transition: border-color .25s; }
+.category-control select { font-size: .95rem; }
+.category-control select option { font-size: .95rem; }
+html[lang="en"] .category-control select { padding-inline: 10px 6px; font-size: .85rem; }
+html[lang="en"] .category-control select option { font-size: .85rem; }
 input:focus, select:focus { border-color: var(--color-text); }
 .button { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; min-height: 46px; padding: 0 22px; color: var(--color-bg); background: var(--color-text); border: 1px solid var(--color-text); border-radius: 4px; font: 500 .78rem/1 var(--font-display); letter-spacing: .09em; text-transform: uppercase; cursor: pointer; transition: transform .3s var(--ease-out-expo), opacity .3s, background .3s, color .3s; }
 .button:hover:not(:disabled) { opacity: .84; transform: translateY(-1px); }
@@ -102,6 +106,11 @@ html[lang="en"] .segmented button { padding-inline: 5px; font-size: .72rem; line
 
 :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+@media (max-width: 1150px) {
+  html[lang="en"] .tool-controls { grid-template-columns: 1fr 1fr; }
+  html[lang="en"] .filter-control { grid-column: 1 / -1; }
+}
 
 @media (max-width: 1024px) {
   .tool-controls { grid-template-columns: 1fr 1fr; }

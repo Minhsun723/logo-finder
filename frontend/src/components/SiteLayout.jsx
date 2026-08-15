@@ -136,17 +136,16 @@ function SocialLinks() {
 }
 
 export function SiteFooter() {
-  const { locale, t } = useLocale();
   return (
     <footer className="l-footer">
       <div className="l-footer__container">
         <div className="l-footer__support"><div className="l-footer__support-inner">
-          <ul className="l-footer__support-list --legal"><li><a href={mainSiteHref('/privacy', locale)} className="l-footer__support-link">{t('footer.privacy')}</a></li><li><a href={mainSiteHref('/terms', locale)} className="l-footer__support-link">{t('footer.terms')}</a></li></ul>
-          <ul className="l-footer__support-list --nav"><li><a href={mainSiteHref('/contact', locale)} className="l-footer__support-link">{t('footer.contact')}</a></li><li><a href={mainSiteHref('/about', locale)} className="l-footer__support-link">{t('footer.about')}</a></li></ul>
+          <ul className="l-footer__support-list --legal"><li><a href={`${MAIN_SITE_URL}/privacy`} className="l-footer__support-link">Privacy Policy</a></li><li><a href={`${MAIN_SITE_URL}/terms`} className="l-footer__support-link">Terms of Service</a></li></ul>
+          <ul className="l-footer__support-list --nav"><li><a href={`${MAIN_SITE_URL}/contact`} className="l-footer__support-link">Contact</a></li><li><a href={`${MAIN_SITE_URL}/about`} className="l-footer__support-link">About</a></li></ul>
         </div></div>
         <div className="l-footer__bottom">
           <div className="l-footer__legal"><p className="l-footer__legal-text">©Ascooo Inc. All rights reserved.</p></div>
-          <div className="l-footer__logo"><a href={mainSiteHref('/', locale)} aria-label="Ascooo Home"><img src={logoDark} alt="Ascooo" /></a></div>
+          <div className="l-footer__logo"><a href={`${MAIN_SITE_URL}/`} aria-label="Ascooo Home"><img src={logoDark} alt="Ascooo" /></a></div>
           <SocialLinks />
         </div>
       </div>
