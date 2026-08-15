@@ -104,6 +104,12 @@ html[lang="en"] .segmented button { padding-inline: 5px; font-size: .72rem; line
 .detail-select-mobile { display: none; }
 .detail-number { color: #e2e8f0; font: 700 clamp(3.3rem, 7vw, 5.5rem)/.9 var(--font-display); letter-spacing: -.06em; }
 
+html[lang="zh"] .control-group label,
+html[lang="zh"] .button,
+html[lang="zh"] .detail-heading strong {
+  font-family: var(--font-body);
+}
+
 :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 

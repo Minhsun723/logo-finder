@@ -136,6 +136,8 @@ function SocialLinks() {
 }
 
 export function SiteFooter() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="l-footer">
       <div className="l-footer__container">
@@ -144,7 +146,7 @@ export function SiteFooter() {
           <ul className="l-footer__support-list --nav"><li><a href={`${MAIN_SITE_URL}/contact`} className="l-footer__support-link">Contact</a></li><li><a href={`${MAIN_SITE_URL}/about`} className="l-footer__support-link">About</a></li></ul>
         </div></div>
         <div className="l-footer__bottom">
-          <div className="l-footer__legal"><p className="l-footer__legal-text">©Ascooo Inc. All rights reserved.</p></div>
+          <div className="l-footer__legal"><p className="l-footer__legal-text">© {currentYear} Ascooo Inc. All rights reserved.</p></div>
           <div className="l-footer__logo"><a href={`${MAIN_SITE_URL}/`} aria-label="Ascooo Home"><img src={logoDark} alt="Ascooo" /></a></div>
           <SocialLinks />
         </div>
